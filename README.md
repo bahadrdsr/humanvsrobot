@@ -32,4 +32,4 @@ A browser-based robot presentation game for very young children. An authenticate
 - If Supabase keys are not configured, the app runs in mock auth mode for local development.
 - The robot currently uses a vector fallback stage while Spine or DragonBones assets are still absent from `public/assets/`.
 - Microphone and camera access are requested only when the presenter triggers Hear or See.# humanvsrobot
-demo app for puddlejumpers
+demo app for puddlejumpers pre
