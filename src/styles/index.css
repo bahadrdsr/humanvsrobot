@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color: #16324f;
+  background:
+    radial-gradient(circle at top, rgba(255, 209, 102, 0.55), transparent 28%),
+    linear-gradient(180deg, #fff8e7 0%, #d7f4ef 46%, #bde4ff 100%);
+  font-family: Tahoma, Geneva, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.focus-ring {
+  outline: 3px solid #ff7f50;
+  outline-offset: 4px;
+}
+
+@keyframes cameraOverlayIn {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes cameraFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes cameraSparkle {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: translate3d(14px, -10px, 0) scale(1.08);
+    opacity: 0.65;
+  }
+}
+
+.camera-overlay-shell {
+  animation: cameraOverlayIn 220ms ease-out;
+}
+
+.camera-overlay-badge {
+  animation: cameraFloat 2.6s ease-in-out infinite;
+}
+
+.camera-overlay-sparkle {
+  animation: cameraSparkle 5.8s ease-in-out infinite;
+}
+
+.camera-overlay-sparkle-delayed {
+  animation-delay: 1.2s;
+}
