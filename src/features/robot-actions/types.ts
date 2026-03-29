@@ -29,6 +29,7 @@ export type RobotActionEvent =
 export type RobotActionCatalogEntry = {
   id: RobotActionId;
   label: string;
+  icon: string;
   description: string;
   cancelSafe: boolean;
 };

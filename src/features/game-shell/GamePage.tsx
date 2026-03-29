@@ -150,40 +150,44 @@ export function GamePage() {
   };
 
   return (
-    <section className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_20rem] gap-3 p-3 lg:gap-4 lg:p-4">
-      <div className="relative min-h-0 overflow-hidden rounded-[2.5rem] bg-white/15">
+    <section className="flex h-full min-h-0 flex-col gap-2 p-2 sm:gap-3 sm:p-3 lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-4 lg:p-4">
+      <div className="relative min-h-0 flex-[5_5_0] overflow-hidden rounded-[2rem] bg-white/15 lg:flex-none lg:rounded-[2.5rem]">
         <PhaserCanvas actionId={actionController.sceneState.actionId} message={currentSceneMessage} status={actionController.sceneState.status} />
         {!senses.seeState.previewVisible ? (
-          <div className="pointer-events-none absolute left-6 top-6 max-w-md rounded-[1.75rem] bg-white/72 px-5 py-4 shadow-bubble backdrop-blur">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-skyplay-teal">Human vs Robot</p>
-            <h1 className="mt-2 font-display text-3xl leading-tight text-skyplay-navy">See, hear, speak, think, and dance</h1>
-            <p className="mt-2 text-sm leading-6 text-skyplay-navy/75">Tap the buttons on the right to make the robot perform each skill.</p>
+          <div className="pointer-events-none absolute left-4 top-4 rounded-[1.5rem] bg-white/72 px-4 py-3 shadow-bubble backdrop-blur lg:left-6 lg:top-6 lg:max-w-md lg:rounded-[1.75rem] lg:px-5 lg:py-4">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-skyplay-teal">Human vs Robot</p>
+            <h1 className="mt-1 font-display text-xl leading-tight text-skyplay-navy lg:mt-2 lg:text-3xl">See, hear, speak, think, and dance</h1>
+            <p className="mt-1 hidden text-sm leading-6 text-skyplay-navy/75 lg:block">Tap the buttons on the right to make the robot perform each skill.</p>
           </div>
         ) : null}
         <CameraPreview message={senses.seeState.message} onClose={onCloseCameraPreview} stream={senses.cameraStream} visible={senses.seeState.previewVisible} />
       </div>
-      <aside className="flex min-h-0 flex-col gap-3 overflow-hidden rounded-[2.25rem] bg-white/28 p-3 shadow-bubble backdrop-blur-xl lg:gap-4 lg:p-4">
+      <aside className="flex min-h-0 flex-[4_4_0] flex-col gap-2 overflow-hidden rounded-[2rem] bg-white/28 p-2 backdrop-blur-xl sm:gap-3 sm:p-3 lg:flex-none lg:gap-3 lg:rounded-[2.25rem] lg:p-4 lg:shadow-bubble">
         <LiveStatus message={currentSceneMessage} />
         <ActionPanel currentAction={actionController.state.currentAction} onAction={onAction} />
-        <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pr-1 lg:gap-4">
-          <HearAction
-            clipDurationMs={senses.hearState.clipDurationMs}
-            fallbackText={senses.hearState.fallbackText}
-            hasRecording={Boolean(senses.hearState.recordingUrl)}
-            message={senses.hearState.message}
-            onPlayRecording={async () => {
-              await senses.playHearRecording();
-            }}
-            onSubmitFallback={onSubmitFallback}
-            playbackState={senses.hearState.playbackState}
-            transcript={senses.hearState.transcript}
-          />
-          <ThinkPanel
-            onSetLeft={thinking.setLeft}
-            onSetRight={thinking.setRight}
-            onSubmit={onSubmitThinkPuzzle}
-            state={thinking.state}
-          />
+        <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1 lg:gap-3">
+            <div className={actionController.state.currentAction === "hear" ? "" : "hidden lg:block"}>
+              <HearAction
+                clipDurationMs={senses.hearState.clipDurationMs}
+                fallbackText={senses.hearState.fallbackText}
+                hasRecording={Boolean(senses.hearState.recordingUrl)}
+                message={senses.hearState.message}
+                onPlayRecording={async () => {
+                  await senses.playHearRecording();
+                }}
+                onSubmitFallback={onSubmitFallback}
+                playbackState={senses.hearState.playbackState}
+                transcript={senses.hearState.transcript}
+              />
+            </div>
+            <div className={actionController.state.currentAction === "think" ? "" : "hidden lg:block"}>
+              <ThinkPanel
+                onSetLeft={thinking.setLeft}
+                onSetRight={thinking.setRight}
+                onSubmit={onSubmitThinkPuzzle}
+                state={thinking.state}
+              />
+            </div>
         </div>
       </aside>
     </section>
