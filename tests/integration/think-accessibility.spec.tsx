@@ -4,18 +4,23 @@ import { ThinkPanel } from "@/features/thinking/ThinkPanel";
 import { renderWithProviders } from "../utils/renderWithProviders";
 
 describe("think accessibility", () => {
-  it("renders prompt answers as buttons", () => {
+  it("renders hand sign pickers and ask-robot button while picking", () => {
+    const state = {
+      phase: "picking" as const,
+      left: 2,
+      right: 3,
+      answer: null,
+      resultMessage: ""
+    };
     renderWithProviders(
       <ThinkPanel
-        answerOptions={["1", "2"]}
-        onSkip={vi.fn()}
-        onSubmitAnswer={vi.fn()}
-        prompt="What is one plus one?"
-        resultMessage="Pick an answer."
+        onSetLeft={vi.fn()}
+        onSetRight={vi.fn()}
+        onSubmit={vi.fn()}
+        state={state}
       />
     );
-
-    expect(screen.getByRole("button", { name: "1" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "2" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /ask the robot/i })).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: /hand sign/i })).toHaveLength(2);
   });
 });

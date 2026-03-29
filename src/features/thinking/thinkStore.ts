@@ -1,17 +1,17 @@
-import type { ThinkPrompt } from "@/features/thinking/prompts";
-
-export type ThinkState = {
-  currentPrompt: ThinkPrompt | null;
-  submittedAnswer: string;
-  result: "unanswered" | "correct" | "incorrect" | "skipped";
+export type HandSignPuzzleState = {
+  phase: "idle" | "picking" | "answered";
+  left: number;
+  right: number;
+  answer: number | null;
   resultMessage: string;
 };
 
-export function createInitialThinkState(): ThinkState {
+export function createInitialThinkState(): HandSignPuzzleState {
   return {
-    currentPrompt: null,
-    submittedAnswer: "",
-    result: "unanswered",
-    resultMessage: "Press Think and the robot will ask a simple question."
+    phase: "idle",
+    left: 1,
+    right: 1,
+    answer: null,
+    resultMessage: ""
   };
 }

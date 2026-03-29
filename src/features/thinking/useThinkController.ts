@@ -1,60 +1,45 @@
-import { useMemo, useState } from "react";
-import { evaluateAnswer } from "@/features/thinking/evaluateAnswer";
-import { thinkPrompts } from "@/features/thinking/prompts";
+import { useState } from "react";
 import { createInitialThinkState } from "@/features/thinking/thinkStore";
+
+export const HAND_SIGNS = [
+  { n: 1, emoji: "\u261d\ufe0f" },
+  { n: 2, emoji: "\u270c\ufe0f" },
+  { n: 3, emoji: "\ud83e\udd1f" },
+  { n: 4, emoji: "\ud83d\udd96" },
+  { n: 5, emoji: "\u270b" }
+] as const;
+
+const NUMBER_WORDS = ["one", "two", "three", "four", "five"] as const;
+
+function spokenLabel(n: number): string {
+  return `${HAND_SIGNS[n - 1].emoji} ${NUMBER_WORDS[n - 1]}`;
+}
 
 export function useThinkController() {
   const [state, setState] = useState(createInitialThinkState);
-  const [promptIndex, setPromptIndex] = useState(0);
 
-  const startThink = () => {
-    const prompt = thinkPrompts[promptIndex % thinkPrompts.length];
-    setPromptIndex((current) => current + 1);
-    setState({
-      currentPrompt: prompt,
-      submittedAnswer: "",
-      result: "unanswered",
-      resultMessage: prompt.promptText
-    });
-    return prompt.promptText;
+  const startPuzzle = () => {
+    setState((s) => ({ ...s, phase: "picking", answer: null, resultMessage: "" }));
   };
 
-  const submitAnswer = (answer: string) => {
-    if (!state.currentPrompt) {
-      throw new Error("The robot is not thinking about a question yet.");
-    }
-
-    const evaluation = evaluateAnswer(state.currentPrompt, answer);
-    setState({
-      currentPrompt: state.currentPrompt,
-      submittedAnswer: answer,
-      result: evaluation.result,
-      resultMessage: evaluation.message
-    });
-    return evaluation.message;
+  const setLeft = (value: number) => {
+    setState((s) => ({ ...s, left: value }));
   };
 
-  const skipPrompt = () => {
-    setState((current) => ({
-      ...current,
-      result: "skipped",
-      resultMessage: "The robot skipped that question and is ready for another one."
-    }));
-    return "The robot skipped that question and is ready for another one.";
+  const setRight = (value: number) => {
+    setState((s) => ({ ...s, right: value }));
   };
 
-  const resetThink = () => {
+  const submitPuzzle = (left: number, right: number) => {
+    const answer = left + right;
+    const message = `${spokenLabel(left)} plus ${spokenLabel(right)} equals ${answer}! The robot figured it out!`;
+    setState((s) => ({ ...s, phase: "answered", answer, resultMessage: message }));
+    return message;
+  };
+
+  const resetPuzzle = () => {
     setState(createInitialThinkState());
   };
 
-  const answerOptions = useMemo(() => ["1", "2", "3", "red", "blue"], []);
-
-  return {
-    state,
-    answerOptions,
-    startThink,
-    submitAnswer,
-    skipPrompt,
-    resetThink
-  };
+  return { state, startPuzzle, setLeft, setRight, submitPuzzle, resetPuzzle };
 }

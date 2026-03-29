@@ -26,7 +26,7 @@ export function GamePage() {
   const sessionId = "local-preview";
 
   const currentSceneMessage = useMemo(() => {
-    if (thinking.state.currentPrompt && actionController.state.currentAction === "think") {
+    if (thinking.state.phase !== "idle" && actionController.state.currentAction === "think") {
       return thinking.state.resultMessage;
     }
 
@@ -39,7 +39,7 @@ export function GamePage() {
     }
 
     return actionController.state.message;
-  }, [actionController.state.message, actionController.state.currentAction, senses.hearState.message, senses.hearState.transcript, senses.seeState.message, senses.seeState.previewVisible, thinking.state.currentPrompt, thinking.state.resultMessage]);
+  }, [actionController.state.message, actionController.state.currentAction, senses.hearState.message, senses.hearState.transcript, senses.seeState.message, senses.seeState.previewVisible, thinking.state.phase, thinking.state.resultMessage]);
 
   const onAction = async (actionId: RobotActionId) => {
     if (actionId === "speak") {
@@ -114,8 +114,8 @@ export function GamePage() {
       if (!started) {
         return;
       }
-      const prompt = thinking.startThink();
-      await speakText(prompt);
+      thinking.startPuzzle();
+      await speakText("Pick two hand signs and I will add them!");
     }
   };
 
@@ -131,22 +131,16 @@ export function GamePage() {
     }
   };
 
-  const onSubmitThinkAnswer = async (answer: string) => {
+  const onSubmitThinkPuzzle = async () => {
     try {
-      const message = thinking.submitAnswer(answer);
+      const message = thinking.submitPuzzle(thinking.state.left, thinking.state.right);
       await speakText(message);
       actionController.completeAction("think", message);
-      recordTelemetryEvent({ eventType: "action_completed", actionId: "think", sessionId, details: { answer } });
+      recordTelemetryEvent({ eventType: "action_completed", actionId: "think", sessionId, details: { left: thinking.state.left, right: thinking.state.right, answer: thinking.state.left + thinking.state.right } });
     } catch (reason: unknown) {
-      const message = reason instanceof Error ? reason.message : "The robot could not check that answer.";
+      const message = reason instanceof Error ? reason.message : "The robot could not figure that out.";
       actionController.failAction("think", message);
-      recordTelemetryEvent({ eventType: "action_failed", severity: "warning", actionId: "think", sessionId, details: { reason: message } });
     }
-  };
-
-  const onSkipThink = () => {
-    const message = thinking.skipPrompt();
-    actionController.completeAction("think", message);
   };
 
   const onCloseCameraPreview = () => {
@@ -185,11 +179,10 @@ export function GamePage() {
             transcript={senses.hearState.transcript}
           />
           <ThinkPanel
-            answerOptions={thinking.answerOptions}
-            onSkip={onSkipThink}
-            onSubmitAnswer={onSubmitThinkAnswer}
-            prompt={thinking.state.currentPrompt?.promptText ?? null}
-            resultMessage={thinking.state.resultMessage}
+            onSetLeft={thinking.setLeft}
+            onSetRight={thinking.setRight}
+            onSubmit={onSubmitThinkPuzzle}
+            state={thinking.state}
           />
         </div>
       </aside>
