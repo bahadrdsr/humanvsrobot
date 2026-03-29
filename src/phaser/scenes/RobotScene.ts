@@ -29,10 +29,11 @@ export class RobotScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("robot-head", "/assets/head.png");
-    this.load.image("robot-torso", "/assets/torso_and_legs.png");
-    this.load.image("robot-left-arm", "/assets/left_arm.png");
-    this.load.image("robot-right-arm", "/assets/right-Arm.png");
+    const base = import.meta.env.BASE_URL;
+    this.load.image("robot-head", `${base}assets/head.png`);
+    this.load.image("robot-torso", `${base}assets/torso_and_legs.png`);
+    this.load.image("robot-left-arm", `${base}assets/left_arm.png`);
+    this.load.image("robot-right-arm", `${base}assets/right-Arm.png`);
   }
 
   create() {
