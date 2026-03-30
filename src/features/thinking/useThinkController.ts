@@ -9,7 +9,7 @@ export const HAND_SIGNS = [
   { n: 5, emoji: "\u270b" }
 ] as const;
 
-const NUMBER_WORDS = ["one", "two", "three", "four", "five"] as const;
+const NUMBER_WORDS = ["bir", "iki", "üç", "dört", "beş"] as const;
 
 function spokenLabel(n: number): string {
   return `${HAND_SIGNS[n - 1].emoji} ${NUMBER_WORDS[n - 1]}`;
@@ -32,7 +32,7 @@ export function useThinkController() {
 
   const submitPuzzle = (left: number, right: number) => {
     const answer = left + right;
-    const message = `${spokenLabel(left)} plus ${spokenLabel(right)} equals ${answer}! The robot figured it out!`;
+    const message = `${spokenLabel(left)} artı ${spokenLabel(right)} eşittir ${answer}! Robot çözdü!`;
     setState((s) => ({ ...s, phase: "answered", answer, resultMessage: message }));
     return message;
   };

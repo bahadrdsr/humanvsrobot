@@ -13,9 +13,9 @@ import { recordTelemetryEvent } from "@/lib/telemetry/logger";
 import { speakText } from "@/lib/speech/synthesis";
 
 const speakPhrases = [
-  "Hello there. I am a playful robot.",
-  "I can speak, dance, think, and learn with you.",
-  "Let us try another robot trick."
+  "Merhaba! Ben eğlenceli bir robotum.",
+  "Seninle konuşabilir, dans edebilir, düşünebilir ve öğrenebilirim.",
+  "Başka bir robot numarası deneyelim."
 ];
 
 export function GamePage() {
@@ -115,7 +115,7 @@ export function GamePage() {
         return;
       }
       thinking.startPuzzle();
-      await speakText("Pick two hand signs and I will add them!");
+      await speakText("İki el işareti seç, ben de toplayacağım!");
     }
   };
 

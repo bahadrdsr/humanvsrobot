@@ -11,13 +11,12 @@ export async function speakText(text: string) {
 
   await new Promise<void>((resolve, reject) => {
     const utterance = new SpeechSynthesisUtterance(text);
-    // Child robot voice: high pitch + slightly faster rate
+    utterance.lang = "tr-TR";
+    // Prefer a Turkish voice; fall back to any available voice
     const voices = window.speechSynthesis.getVoices();
-    const childVoice = voices.find(v =>
-      /junior|child|girl|kyoko|veena|fiona|karen|tessa|zira/i.test(v.name)
-    ) ?? voices.find(v => v.lang.startsWith("en") && /female/i.test(v.name)) ?? null;
-    if (childVoice) {
-      utterance.voice = childVoice;
+    const turkishVoice = voices.find(v => v.lang.startsWith("tr")) ?? null;
+    if (turkishVoice) {
+      utterance.voice = turkishVoice;
     }
     utterance.pitch = 1.8;
     utterance.rate = 1.1;
