@@ -49,6 +49,7 @@ export class RobotScene extends Phaser.Scene {
 
     this.controller = new RobotController(this, createAnimationAdapter());
     this.controller.layout();
+    this.controller.setState(null, "idle");
 
     this.listener = (event: Event) => {
       const detail = (event as CustomEvent<SceneUpdateDetail>).detail;

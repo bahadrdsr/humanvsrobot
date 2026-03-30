@@ -350,7 +350,7 @@ export class RobotController {
     this.resetPose();
 
     if (!actionId || status === "idle") {
-      this.drawFace("neutral");
+      this.drawFace("happy");
       // Gentle idle float
       this.scene.tweens.add({
         targets: this.container,
