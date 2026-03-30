@@ -12,7 +12,7 @@ export const HAND_SIGNS = [
 const NUMBER_WORDS = ["bir", "iki", "üç", "dört", "beş"] as const;
 
 function spokenLabel(n: number): string {
-  return `${HAND_SIGNS[n - 1].emoji} ${NUMBER_WORDS[n - 1]}`;
+  return NUMBER_WORDS[n - 1];
 }
 
 export function useThinkController() {

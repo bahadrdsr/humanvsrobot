@@ -76,3 +76,18 @@ body {
 .camera-overlay-sparkle-delayed {
   animation-delay: 1.2s;
 }
+
+.speech-cloud {
+  position: relative;
+}
+
+.speech-cloud::after {
+  content: "";
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 14px solid transparent;
+  border-top: 14px solid rgba(255, 255, 255, 0.8);
+  border-bottom: 0;
+}
