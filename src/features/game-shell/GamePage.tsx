@@ -140,7 +140,7 @@ export function GamePage() {
       <div aria-live="polite" className="sr-only" role="status">{currentSceneMessage}</div>
       <div className="relative h-full overflow-hidden rounded-[2rem] bg-white/15 lg:rounded-[2.5rem]">
         <PhaserCanvas actionId={actionController.sceneState.actionId} message={currentSceneMessage} status={actionController.sceneState.status} />
-        {!senses.seeState.previewVisible ? (
+        {!senses.seeState.previewVisible && actionController.state.currentAction !== "think" ? (
           <div className="pointer-events-none absolute left-4 top-4 rounded-[1.5rem] bg-white/72 px-4 py-3 shadow-bubble backdrop-blur lg:left-6 lg:top-6 lg:max-w-md lg:rounded-[1.75rem] lg:px-5 lg:py-4">
             <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-skyplay-teal">Human vs Robot</p>
             <h1 className="mt-1 font-display text-xl leading-tight text-skyplay-navy lg:mt-2 lg:text-3xl">See, hear, speak, think, and dance</h1>
@@ -149,7 +149,7 @@ export function GamePage() {
         ) : null}
         <CameraPreview message={senses.seeState.message} onClose={onCloseCameraPreview} stream={senses.cameraStream} visible={senses.seeState.previewVisible} />
         {actionController.state.currentAction === "think" && thinking.state.phase !== "idle" ? (
-          <div className="speech-cloud absolute left-1/2 top-4 z-20 w-[min(90%,22rem)] -translate-x-1/2">
+          <div className="speech-cloud absolute left-1/2 top-1/2 z-20 w-[min(90%,22rem)] -translate-x-1/2 -translate-y-1/2">
             <ThinkPanel
               onSetLeft={thinking.setLeft}
               onSetRight={thinking.setRight}

@@ -31,17 +31,22 @@ export async function speakText(text: string) {
   window.speechSynthesis.cancel();
 
   const voices = await loadVoices();
-  // Prefer a Turkish locale voice; browsers may label it "tr-TR" or "tr_TR"
-  const turkishVoice =
+  // 1. Female Turkish voice (child-like timbre)
+  // 2. Any Turkish voice
+  // 3. Child/female English voice as a fallback (lang hint still set to tr-TR)
+  const voice =
+    voices.find(v => v.lang.toLowerCase().startsWith("tr") && /female|kadin|bayan|bahar/i.test(v.name)) ??
     voices.find(v => v.lang === "tr-TR") ??
     voices.find(v => v.lang.toLowerCase().startsWith("tr")) ??
+    voices.find(v => /junior|child|girl|kyoko|veena|fiona|karen|tessa|zira/i.test(v.name)) ??
+    voices.find(v => v.lang.startsWith("en") && /female/i.test(v.name)) ??
     null;
 
   await new Promise<void>((resolve, reject) => {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "tr-TR";
-    if (turkishVoice) {
-      utterance.voice = turkishVoice;
+    if (voice) {
+      utterance.voice = voice;
     }
     utterance.pitch = 1.8;
     utterance.rate = 1.1;

@@ -77,10 +77,6 @@ body {
   animation-delay: 1.2s;
 }
 
-.speech-cloud {
-  position: relative;
-}
-
 .speech-cloud::after {
   content: "";
   position: absolute;
