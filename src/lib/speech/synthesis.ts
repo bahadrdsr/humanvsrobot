@@ -1,3 +1,24 @@
+/** Resolves once the browser's voice list is populated (or immediately if already loaded). */
+function loadVoices(): Promise<SpeechSynthesisVoice[]> {
+  return new Promise((resolve) => {
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      resolve(voices);
+      return;
+    }
+    const onChanged = () => {
+      window.speechSynthesis.removeEventListener("voiceschanged", onChanged);
+      resolve(window.speechSynthesis.getVoices());
+    };
+    window.speechSynthesis.addEventListener("voiceschanged", onChanged);
+    // Safety timeout: resolve with whatever is available after 2 s
+    window.setTimeout(() => {
+      window.speechSynthesis.removeEventListener("voiceschanged", onChanged);
+      resolve(window.speechSynthesis.getVoices());
+    }, 2000);
+  });
+}
+
 export async function speakText(text: string) {
   if (!text.trim()) {
     return;
@@ -9,12 +30,16 @@ export async function speakText(text: string) {
 
   window.speechSynthesis.cancel();
 
+  const voices = await loadVoices();
+  // Prefer a Turkish locale voice; browsers may label it "tr-TR" or "tr_TR"
+  const turkishVoice =
+    voices.find(v => v.lang === "tr-TR") ??
+    voices.find(v => v.lang.toLowerCase().startsWith("tr")) ??
+    null;
+
   await new Promise<void>((resolve, reject) => {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "tr-TR";
-    // Prefer a Turkish voice; fall back to any available voice
-    const voices = window.speechSynthesis.getVoices();
-    const turkishVoice = voices.find(v => v.lang.startsWith("tr")) ?? null;
     if (turkishVoice) {
       utterance.voice = turkishVoice;
     }
