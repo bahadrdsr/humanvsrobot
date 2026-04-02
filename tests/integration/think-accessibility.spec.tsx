@@ -4,7 +4,7 @@ import { ThinkPanel } from "@/features/thinking/ThinkPanel";
 import { renderWithProviders } from "../utils/renderWithProviders";
 
 describe("think accessibility", () => {
-  it("renders hand sign pickers and ask-robot button while picking", () => {
+  it("renders hand sign pickers and the ask-computer button while picking", () => {
     const state = {
       phase: "picking" as const,
       left: 2,
@@ -20,7 +20,7 @@ describe("think accessibility", () => {
         state={state}
       />
     );
-    expect(screen.getByRole("button", { name: /ask the robot/i })).toBeInTheDocument();
-    expect(screen.getAllByRole("button", { name: /hand sign/i })).toHaveLength(2);
+    expect(screen.getByRole("button", { name: /bilgisayara sor/i })).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: /el isareti/i })).toHaveLength(2);
   });
 });

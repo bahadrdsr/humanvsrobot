@@ -10,11 +10,11 @@ describe("performance smoke coverage", () => {
     await act(async () => {
       await result.current.runAction("dance", async () => {
         await new Promise((resolve) => setTimeout(resolve, 50));
-        return "The robot danced.";
+        return "Bilgisayar dans etti.";
       });
     });
 
-    expect(result.current.state.message).toContain("danced");
+    expect(result.current.state.message).toContain("dans");
     expect(performance.now() - start).toBeLessThan(1000);
   });
 });

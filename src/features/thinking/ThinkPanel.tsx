@@ -13,7 +13,7 @@ function HandSignCard({ value, onChange, disabled }: { value: number; onChange: 
   const next = () => onChange(value >= 5 ? 1 : value + 1);
   return (
     <button
-      aria-label={`Hand sign ${value}, tap to change`}
+      aria-label={`El isareti ${value}, degistirmek icin dokun`}
       className="flex h-24 w-20 cursor-pointer select-none flex-col items-center justify-center gap-1 rounded-2xl border-2 border-skyplay-teal/40 bg-skyplay-cream shadow transition active:scale-95 disabled:cursor-default disabled:opacity-60"
       disabled={disabled}
       onClick={next}
@@ -21,7 +21,7 @@ function HandSignCard({ value, onChange, disabled }: { value: number; onChange: 
     >
       <span className="text-4xl leading-none">{sign.emoji}</span>
       <span className="text-lg font-bold text-skyplay-navy">{sign.n}</span>
-      <span className="text-[10px] text-skyplay-navy/50">tap to change</span>
+      <span className="text-[10px] text-skyplay-navy/50">dokun ve degistir</span>
     </button>
   );
 }
@@ -32,15 +32,15 @@ export function ThinkPanel({ state, onSetLeft, onSetRight, onSubmit }: ThinkPane
 
   return (
     <div className="rounded-[1.75rem] bg-white/80 p-5 shadow-bubble">
-      <h3 className="font-display text-2xl text-skyplay-navy">Think</h3>
+      <h3 className="font-display text-2xl text-skyplay-navy">Dusun</h3>
       {state.phase === "idle" ? (
         <p className="mt-3 text-sm leading-6 text-skyplay-navy/70">
-          Press <strong>Think</strong> and ask the robot to add two hand signs!
+          <strong>Dusun</strong> dugmesine bas ve bilgisayardan iki el isaretini toplamasini iste!
         </p>
       ) : (
         <>
           <p className="mt-2 text-sm font-semibold text-skyplay-teal">
-            {isPicking ? "Pick two hand signs — the robot will add them!" : "The robot answered!"}
+            {isPicking ? "Iki el isareti sec, bilgisayar toplasin!" : "Bilgisayar cevapladi!"}
           </p>
           <div className="mt-4 flex items-center justify-center gap-3">
             <HandSignCard disabled={isAnswered} onChange={onSetLeft} value={state.left} />
@@ -51,7 +51,7 @@ export function ThinkPanel({ state, onSetLeft, onSetRight, onSubmit }: ThinkPane
               {isAnswered && state.answer !== null ? (
                 <>
                   <span className="text-3xl font-bold text-skyplay-teal">{state.answer}</span>
-                  <span className="text-[10px] text-skyplay-navy/50">answer</span>
+                  <span className="text-[10px] text-skyplay-navy/50">cevap</span>
                 </>
               ) : (
                 <span className="text-3xl text-skyplay-navy/30">?</span>
@@ -64,7 +64,7 @@ export function ThinkPanel({ state, onSetLeft, onSetRight, onSubmit }: ThinkPane
               onClick={onSubmit}
               type="button"
             >
-              Ask the robot! 🤖
+              Bilgisayara sor! 💻
             </button>
           )}
           {state.resultMessage ? (

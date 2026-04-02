@@ -9,13 +9,12 @@ describe("game shell accessibility", () => {
     renderWithProviders(
       <div>
         <ActionPanel currentAction={null} onAction={() => undefined} />
-        <LiveStatus message="The robot is ready." />
+        <LiveStatus message="Bilgisayar hazir." />
       </div>
     );
 
-    // Each action renders in both the compact mobile grid and the full desktop list
-    const speakButtons = screen.getAllByRole("button", { name: /^Speak/i });
-    const hearButtons = screen.getAllByRole("button", { name: /^Hear/i });
+    const speakButtons = screen.getAllByRole("button", { name: /^Konus/i });
+    const hearButtons = screen.getAllByRole("button", { name: /^Dinle/i });
     expect(speakButtons.length).toBeGreaterThanOrEqual(1);
     expect(hearButtons.length).toBeGreaterThanOrEqual(1);
     expect(screen.getByRole("status")).toHaveAttribute("aria-live", "polite");

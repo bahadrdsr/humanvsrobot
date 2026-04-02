@@ -3,7 +3,7 @@ import type { RobotActionEvent, RobotActionState } from "@/features/robot-action
 export const initialRobotActionState: RobotActionState = {
   currentAction: null,
   status: "idle",
-  message: "Press a robot button to start the demo.",
+  message: "Demoyu baslatmak icin bir bilgisayar dugmesine bas.",
   updatedAt: Date.now(),
   lastCompletedAction: null
 };

@@ -4,7 +4,8 @@ async function requestMedia(constraints: MediaStreamConstraints, permissionName:
   const permissionState = await queryPermissionState(permissionName);
 
   if (!navigator.mediaDevices?.getUserMedia) {
-    throw new Error(`${permissionName} access is not supported in this browser.`);
+    const label = permissionName === "microphone" ? "Mikrofon" : "Kamera";
+    throw new Error(`${label} erisimi bu tarayicida desteklenmiyor.`);
   }
 
   const stream = await navigator.mediaDevices.getUserMedia(constraints);

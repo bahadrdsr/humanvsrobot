@@ -1,25 +1,33 @@
 import type { RobotActionId } from "@/features/robot-actions/types";
 
 const labels: Record<RobotActionId, string> = {
-  speak: "speaking",
-  hear: "listening",
-  see: "looking",
-  think: "thinking",
-  dance: "dancing"
+  speak: "konusuyor",
+  hear: "dinliyor",
+  see: "bakiyor",
+  think: "dusunuyor",
+  dance: "dans ediyor"
+};
+
+const completionLabels: Record<RobotActionId, string> = {
+  speak: "konusmayi",
+  hear: "dinlemeyi",
+  see: "bakmayi",
+  think: "dusunmeyi",
+  dance: "dansi"
 };
 
 export function getStartMessage(actionId: RobotActionId) {
-  return `The robot is ${labels[actionId]} now.`;
+  return `Bilgisayar simdi ${labels[actionId]}.`;
 }
 
 export function getIgnoredMessage(actionId: RobotActionId) {
-  return `The robot is busy, so it cannot switch to ${labels[actionId]} yet.`;
+  return `Bilgisayar mesgul, henuz ${labels[actionId]} moduna gecemiyor.`;
 }
 
 export function getCompleteMessage(actionId: RobotActionId, detail?: string) {
-  return detail ?? `The robot finished ${labels[actionId]}.`;
+  return detail ?? `Bilgisayar ${completionLabels[actionId]} tamamladi.`;
 }
 
 export function getFailureMessage(actionId: RobotActionId, detail: string) {
-  return `The robot could not finish ${labels[actionId]}: ${detail}`;
+  return `Bilgisayar ${completionLabels[actionId]} tamamlayamadi: ${detail}`;
 }

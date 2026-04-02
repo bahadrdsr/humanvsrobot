@@ -40,7 +40,7 @@ export class RobotScene extends Phaser.Scene {
     this.background = this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0xbde4ff, 1).setOrigin(0);
     this.sun = this.add.circle(90, 90, 62, 0xffd166, 0.45);
     this.cloud = this.add.circle(this.scale.width - 120, 150, 96, 0xffffff, 0.25);
-    this.title = this.add.text(this.scale.width / 2, 38, "Robot stage", {
+    this.title = this.add.text(this.scale.width / 2, 38, "Bilgisayar sahnesi", {
       color: "#16324f",
       fontFamily: "Tahoma",
       fontSize: "28px",

@@ -15,18 +15,18 @@ export function LoginPage() {
   return (
     <section className="grid h-full place-items-center p-6">
       <div className="max-w-2xl rounded-[2.5rem] bg-white/78 p-8 text-skyplay-navy shadow-bubble backdrop-blur lg:p-10">
-        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-skyplay-teal">Preview mode</p>
-        <h1 className="mt-3 font-display text-4xl leading-tight">Auth is paused while we focus on the robot demo.</h1>
+        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-skyplay-teal">Onizleme modu</p>
+        <h1 className="mt-3 font-display text-4xl leading-tight">Kimlik dogrulama gecici olarak duraklatildi; simdi bilgisayar demosuna odaklaniyoruz.</h1>
         <p className="mt-4 text-base leading-7 text-skyplay-navy/75">
-          The stage opens directly now so the layout, controls, and robot animation can be refined first.
-          When auth comes back, this screen can become the real presenter sign-in again.
+          Duzen, kontroller ve bilgisayar animasyonu once netlessin diye sahne simdilik dogrudan aciliyor.
+          Kimlik dogrulama geri geldiginde bu ekran yeniden gercek giris sayfasi olabilir.
         </p>
         <button
           className="mt-8 rounded-full bg-skyplay-teal px-7 py-4 text-lg font-bold text-white transition hover:scale-[1.01]"
           onClick={openPreview}
           type="button"
         >
-          Open the robot stage
+          Bilgisayar sahnesini ac
         </button>
       </div>
     </section>

@@ -12,18 +12,19 @@ describe("senses accessibility", () => {
           clipDurationMs={0}
           fallbackText=""
           hasRecording={false}
-          message="Use the text box if listening is unavailable."
+          message="Dinleme kullanilamazsa metin kutusunu kullan."
           onPlayRecording={vi.fn(async () => undefined)}
           onSubmitFallback={vi.fn()}
           playbackState="idle"
+          requiresManualPlayback={false}
           transcript=""
         />
-        <CameraPreview message="Camera is off." onClose={vi.fn()} stream={null} visible />
+        <CameraPreview message="Kamera kapali." onClose={vi.fn()} stream={null} visible />
       </div>
     );
 
-    expect(screen.getByLabelText("Fallback phrase")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /close camera view/i })).toBeInTheDocument();
-    expect(screen.getByText(/camera is off/i)).toBeInTheDocument();
+    expect(screen.getByLabelText("Yedek ifade")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /kamera gorunumunu kapat/i })).toBeInTheDocument();
+    expect(screen.getByText(/kamera kapali/i)).toBeInTheDocument();
   });
 });

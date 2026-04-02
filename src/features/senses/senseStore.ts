@@ -9,6 +9,7 @@ export type HearState = {
   message: string;
   recordingUrl: string | null;
   clipDurationMs: number;
+  requiresManualPlayback: boolean;
   playbackState: "idle" | "ready" | "playing" | "failed";
 };
 
@@ -27,9 +28,10 @@ export function createInitialHearState(): HearState {
     deviceState: "idle",
     transcript: "",
     fallbackText: "",
-    message: "Ask the robot to listen when you are ready.",
+    message: "Hazir oldugunda Dinle dugmesine bas.",
     recordingUrl: null,
     clipDurationMs: 0,
+    requiresManualPlayback: false,
     playbackState: "idle"
   };
 }
@@ -39,7 +41,7 @@ export function createInitialSeeState(): SeeState {
     mode: "see",
     permissionState: "unknown",
     deviceState: "idle",
-    message: "Press See when you want the robot to open the camera.",
+    message: "Kamerayi acmak istediginde Gor dugmesine bas.",
     previewVisible: false
   };
 }

@@ -7,7 +7,15 @@ type EvaluationResult = {
 };
 
 export function normalizeAnswer(answer: string) {
-  return answer.trim().toLowerCase();
+  return answer
+    .trim()
+    .toLocaleLowerCase("tr-TR")
+    .replaceAll("ç", "c")
+    .replaceAll("ğ", "g")
+    .replaceAll("ı", "i")
+    .replaceAll("ö", "o")
+    .replaceAll("ş", "s")
+    .replaceAll("ü", "u");
 }
 
 export function evaluateAnswer(prompt: ThinkPrompt, answer: string): EvaluationResult {

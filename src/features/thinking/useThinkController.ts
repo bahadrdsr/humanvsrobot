@@ -32,7 +32,7 @@ export function useThinkController() {
 
   const submitPuzzle = (left: number, right: number) => {
     const answer = left + right;
-    const message = `${spokenLabel(left)} artı ${spokenLabel(right)} eşittir ${answer}! Robot çözdü!`;
+    const message = `${spokenLabel(left)} arti ${spokenLabel(right)} esittir ${answer}! Bilgisayar cozdu!`;
     setState((s) => ({ ...s, phase: "answered", answer, resultMessage: message }));
     return message;
   };

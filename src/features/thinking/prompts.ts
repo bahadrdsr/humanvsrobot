@@ -12,32 +12,32 @@ export type ThinkPrompt = {
 export const thinkPrompts: ThinkPrompt[] = [
   {
     promptId: "count-2-bears",
-    promptText: "How many teddy bears are in two little hands?",
+    promptText: "Iki kucuk elde kac oyuncak ayi var?",
     promptType: "counting",
     expectedAnswer: "2",
     resultMessage: {
-      correct: "Yes. Two hands can hold two teddy bears. Great thinking!",
-      incorrect: "Nice try. The robot was thinking about two teddy bears."
+      correct: "Evet. Iki elde iki oyuncak ayi var. Harika dusundun!",
+      incorrect: "Guzel deneme. Bilgisayar iki oyuncak ayiyi dusunuyordu."
     }
   },
   {
     promptId: "add-1-1",
-    promptText: "What is one robot plus one robot?",
+    promptText: "Bir bilgisayar arti bir bilgisayar kac eder?",
     promptType: "simple-addition",
     expectedAnswer: "2",
     resultMessage: {
-      correct: "Right. One robot and one robot make two robots!",
-      incorrect: "That was a fun guess. One robot plus one robot makes two."
+      correct: "Dogru. Bir bilgisayar ile bir bilgisayar iki eder!",
+      incorrect: "Eglenceli bir tahmindi. Bir bilgisayar arti bir bilgisayar iki eder."
     }
   },
   {
     promptId: "match-red",
-    promptText: "Which color matches a shiny fire truck: red or blue?",
+    promptText: "Parlak bir itfaiye aracina hangi renk uyar: kirmizi mi mavi mi?",
     promptType: "matching",
-    expectedAnswer: "red",
+    expectedAnswer: "kirmizi",
     resultMessage: {
-      correct: "Yes. Red is a bright fire-truck color!",
-      incorrect: "Blue is pretty, but the robot was looking for red."
+      correct: "Evet. Kirmizi itfaiye araci icin parlak bir renktir!",
+      incorrect: "Mavi guzel, ama bilgisayar kirmiziyi ariyordu."
     }
   }
 ];

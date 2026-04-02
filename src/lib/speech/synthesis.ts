@@ -51,7 +51,7 @@ export async function speakText(text: string) {
     utterance.pitch = 1.8;
     utterance.rate = 1.1;
     utterance.onend = () => resolve();
-    utterance.onerror = () => reject(new Error("The robot could not speak out loud just now."));
+    utterance.onerror = () => reject(new Error("Bilgisayar sesi simdi yuksek sesle oynatamadi."));
     window.speechSynthesis.speak(utterance);
   });
 }

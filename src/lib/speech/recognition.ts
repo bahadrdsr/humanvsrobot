@@ -29,7 +29,7 @@ export async function recognizeShortPhrase(): Promise<SpeechRecognitionResult> {
   if (!Recognition) {
     return {
       kind: "unsupported",
-      message: "This browser cannot listen for speech, so use the fallback text box instead."
+      message: "Bu tarayici sesi dinleyemiyor. Bunun yerine yedek metin kutusunu kullan."
     };
   }
 
@@ -39,7 +39,7 @@ export async function recognizeShortPhrase(): Promise<SpeechRecognitionResult> {
 
     recognition.continuous = false;
     recognition.interimResults = false;
-    recognition.lang = "en-US";
+    recognition.lang = "tr-TR";
     recognition.maxAlternatives = 1;
 
     recognition.onresult = (event) => {
@@ -50,7 +50,7 @@ export async function recognizeShortPhrase(): Promise<SpeechRecognitionResult> {
       const transcript = event.results?.[0]?.[0]?.transcript?.trim();
       if (transcript) {
         settled = true;
-        resolve({ kind: "success", transcript, message: `The robot heard: ${transcript}` });
+        resolve({ kind: "success", transcript, message: `Bilgisayar sunu duydu: ${transcript}` });
       }
     };
 
@@ -61,17 +61,17 @@ export async function recognizeShortPhrase(): Promise<SpeechRecognitionResult> {
 
       settled = true;
       if (event.error === "no-speech") {
-        resolve({ kind: "no-speech", message: "The robot did not catch any words. Try again or type the phrase instead." });
+        resolve({ kind: "no-speech", message: "Bilgisayar net bir soz duyamadi. Yeniden dene ya da ifadeyi yazarak gir." });
         return;
       }
 
-      resolve({ kind: "error", message: `Listening stopped because of ${event.error}.` });
+      resolve({ kind: "error", message: `Dinleme ${event.error} nedeniyle durdu.` });
     };
 
     recognition.onend = () => {
       if (!settled) {
         settled = true;
-        resolve({ kind: "no-speech", message: "The robot did not hear a clear phrase yet." });
+        resolve({ kind: "no-speech", message: "Bilgisayar henuz net bir ifade duymadi." });
       }
     };
 

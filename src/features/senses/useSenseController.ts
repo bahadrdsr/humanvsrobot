@@ -5,11 +5,24 @@ import { recognizeShortPhrase, type SpeechRecognitionResult } from "@/lib/speech
 import { speakText } from "@/lib/speech/synthesis";
 import { createInitialHearState, createInitialSeeState } from "@/features/senses/senseStore";
 
+function shouldPreferManualPlayback() {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  const coarsePointer = typeof window.matchMedia === "function" && window.matchMedia("(pointer: coarse)").matches;
+  const hasTouchPoints = typeof navigator !== "undefined" && navigator.maxTouchPoints > 0;
+  const mobileUserAgent = typeof navigator !== "undefined" && /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+
+  return coarsePointer || hasTouchPoints || mobileUserAgent;
+}
+
 export function useSenseController() {
   const [hearState, setHearState] = useState(createInitialHearState);
   const [seeState, setSeeState] = useState(createInitialSeeState);
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const recordingUrlRef = useRef<string | null>(null);
+  const manualPlaybackPreferredRef = useRef(shouldPreferManualPlayback());
 
   const replaceRecording = useCallback((audioUrl: string | null) => {
     if (recordingUrlRef.current && recordingUrlRef.current !== audioUrl) {
@@ -21,7 +34,7 @@ export function useSenseController() {
 
   const playHearRecording = useCallback(async (audioUrl = recordingUrlRef.current) => {
     if (!audioUrl) {
-      throw new Error("There is no recent recording to play yet.");
+      throw new Error("Henuz oynatilacak yeni bir ses klibi yok.");
     }
 
     setHearState((current) => ({ ...current, playbackState: "playing" }));
@@ -31,7 +44,11 @@ export function useSenseController() {
       setHearState((current) => ({ ...current, playbackState: "ready" }));
       return true;
     } catch (reason: unknown) {
-      const message = reason instanceof Error ? reason.message : "The browser blocked playback of the sound clip.";
+      const message = reason instanceof Error && reason.message === "Tarayici ses klibini oynatamadi."
+        ? "Ses klibi otomatik baslamadi. Dinlemek icin 'Klibi oynat' dugmesine dokun."
+        : reason instanceof Error
+          ? reason.message
+          : "Ses klibi otomatik baslamadi. Dinlemek icin 'Klibi oynat' dugmesine dokun.";
       setHearState((current) => ({ ...current, playbackState: "failed", message }));
       throw new Error(message);
     }
@@ -49,9 +66,10 @@ export function useSenseController() {
     setHearState((current) => ({
       ...current,
       deviceState: "requesting",
-      message: "The robot is asking for microphone permission.",
+      message: "Bilgisayar mikrofon izni istiyor.",
       recordingUrl: null,
       clipDurationMs: 0,
+      requiresManualPlayback: manualPlaybackPreferredRef.current,
       playbackState: "idle"
     }));
 
@@ -61,7 +79,7 @@ export function useSenseController() {
         ...current,
         permissionState,
         deviceState: "active",
-        message: "The robot is listening for up to 5 seconds."
+        message: "Bilgisayar 5 saniyeye kadar dinliyor."
       }));
 
       const [recordingResult, recognitionResult] = await Promise.allSettled([
@@ -72,17 +90,20 @@ export function useSenseController() {
 
       const recording = recordingResult.status === "fulfilled"
         ? recordingResult.value
-        : { audioUrl: null, durationMs: 0, supported: false };
+        : { audioUrl: null, durationMs: 0, supported: false, mimeType: null };
       const recognition: SpeechRecognitionResult = recognitionResult.status === "fulfilled"
         ? recognitionResult.value
-        : { kind: "error", message: "The robot could not understand the words it heard." };
+        : { kind: "error", message: "Bilgisayar duydugu sozcukleri anlayamadi." };
+      const requiresManualPlayback = manualPlaybackPreferredRef.current;
 
       replaceRecording(recording.audioUrl);
 
       if (recognition.kind === "success") {
         const clipSeconds = Math.max(1, Math.round((recording.durationMs || 5000) / 1000));
         const nextMessage = recording.audioUrl
-          ? `${recognition.message} I saved a ${clipSeconds}-second clip and I am playing it back now.`
+          ? requiresManualPlayback
+            ? `${recognition.message} ${clipSeconds} saniyelik kisa bir ses klibi kaydedildi. Dinlemek icin 'Klibi oynat' dugmesine dokun.`
+            : `${recognition.message} ${clipSeconds} saniyelik kisa bir ses klibi kaydedildi. Simdi oynatiliyor.`
           : recognition.message;
 
         setHearState((current) => ({
@@ -94,10 +115,11 @@ export function useSenseController() {
           fallbackText: "",
           recordingUrl: recording.audioUrl,
           clipDurationMs: recording.durationMs,
+          requiresManualPlayback,
           playbackState: recording.audioUrl ? "ready" : "idle"
         }));
 
-        if (recording.audioUrl) {
+        if (recording.audioUrl && !requiresManualPlayback) {
           void playHearRecording(recording.audioUrl);
         }
 
@@ -105,7 +127,9 @@ export function useSenseController() {
       }
 
       const fallbackMessage = recording.audioUrl
-        ? `${recognition.message} The robot still kept a short sound clip so you can replay it.`
+        ? requiresManualPlayback
+          ? `${recognition.message} Yine de kisa bir ses klibi kaydedildi. Dinlemek icin 'Klibi oynat' dugmesine dokun.`
+          : `${recognition.message} Yine de kisa bir ses klibi kaydedildi; yeniden oynatabilirsin.`
         : recognition.message;
 
       setHearState((current) => ({
@@ -115,17 +139,22 @@ export function useSenseController() {
         message: fallbackMessage,
         recordingUrl: recording.audioUrl,
         clipDurationMs: recording.durationMs,
+        requiresManualPlayback,
         playbackState: recording.audioUrl ? "ready" : "idle"
       }));
 
-      if (recording.audioUrl) {
+      if (recording.audioUrl && !requiresManualPlayback) {
         void playHearRecording(recording.audioUrl);
+        return { ok: true, message: fallbackMessage };
+      }
+
+      if (recording.audioUrl) {
         return { ok: true, message: fallbackMessage };
       }
 
       throw new Error(recognition.message);
     } catch (reason: unknown) {
-      const message = reason instanceof Error ? reason.message : "The robot could not start listening.";
+      const message = reason instanceof Error ? reason.message : "Bilgisayar simdi dinlemeyi baslatamadi.";
       setHearState((current) => ({ ...current, deviceState: "failed", message }));
       throw new Error(message);
     }
@@ -134,7 +163,7 @@ export function useSenseController() {
   const submitFallbackTranscript = async (text: string) => {
     const cleaned = text.trim();
     if (!cleaned) {
-      throw new Error("Type a short phrase so the robot has something to repeat.");
+      throw new Error("Bilgisayarin tekrar etmesi icin kisa bir ifade yaz.");
     }
 
     await speakText(cleaned);
@@ -143,17 +172,18 @@ export function useSenseController() {
       transcript: cleaned,
       fallbackText: cleaned,
       deviceState: "completed",
-      message: `The robot repeated the typed phrase: ${cleaned}`,
+      message: `Bilgisayar yazilan ifadeyi tekrar etti: ${cleaned}`,
       recordingUrl: null,
       clipDurationMs: 0,
+      requiresManualPlayback: false,
       playbackState: "idle"
     }));
 
-    return `The robot repeated the typed phrase: ${cleaned}`;
+    return `Bilgisayar yazilan ifadeyi tekrar etti: ${cleaned}`;
   };
 
   const startSee = async () => {
-    setSeeState((current) => ({ ...current, deviceState: "requesting", message: "The robot is asking for camera permission." }));
+    setSeeState((current) => ({ ...current, deviceState: "requesting", message: "Bilgisayar kamera izni istiyor." }));
 
     try {
       const { stream, permissionState } = await requestCamera();
@@ -162,13 +192,13 @@ export function useSenseController() {
         mode: "see",
         permissionState,
         deviceState: "active",
-        message: "The robot is looking through the camera.",
+        message: "Bilgisayar kamera goruntusune bakiyor.",
         previewVisible: true
       });
 
-      return { ok: true, message: "The robot opened the camera view." };
+      return { ok: true, message: "Bilgisayar kamera goruntusunu acti." };
     } catch (reason: unknown) {
-      const message = reason instanceof Error ? reason.message : "The robot could not open the camera.";
+      const message = reason instanceof Error ? reason.message : "Bilgisayar kamerayi acamadi.";
       setSeeState({
         mode: "see",
         permissionState: "denied",
@@ -187,10 +217,10 @@ export function useSenseController() {
       mode: "see",
       permissionState: seeState.permissionState,
       deviceState: "completed",
-      message: "The robot closed the camera view.",
+      message: "Bilgisayar kamera goruntusunu kapatti.",
       previewVisible: false
     });
-    return "The robot closed the camera view.";
+    return "Bilgisayar kamera goruntusunu kapatti.";
   };
 
   const resetSenseState = () => {

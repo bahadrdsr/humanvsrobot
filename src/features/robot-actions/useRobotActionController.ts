@@ -15,7 +15,7 @@ export function useRobotActionController() {
         return false;
       }
 
-      dispatch({ type: "CANCEL", actionId: state.currentAction, message: `${currentEntry.label} stopped so the robot could switch actions.` });
+      dispatch({ type: "CANCEL", actionId: state.currentAction, message: `${currentEntry.label} durduruldu, bilgisayar baska bir eyleme gecti.` });
     }
 
     dispatch({ type: "START", actionId, message });
@@ -46,7 +46,7 @@ export function useRobotActionController() {
       completeAction(actionId, typeof result === "string" ? result : undefined);
       return true;
     } catch (reason: unknown) {
-      failAction(actionId, reason instanceof Error ? reason.message : "Something went wrong.");
+      failAction(actionId, reason instanceof Error ? reason.message : "Bir seyler ters gitti.");
       return false;
     }
   };
