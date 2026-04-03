@@ -34,7 +34,7 @@ export function useSenseController() {
 
   const playHearRecording = useCallback(async (audioUrl = recordingUrlRef.current) => {
     if (!audioUrl) {
-      throw new Error("Henuz oynatilacak yeni bir ses klibi yok.");
+      throw new Error("Henüz oynatılacak yeni bir ses klibi yok.");
     }
 
     setHearState((current) => ({ ...current, playbackState: "playing" }));
@@ -44,11 +44,11 @@ export function useSenseController() {
       setHearState((current) => ({ ...current, playbackState: "ready" }));
       return true;
     } catch (reason: unknown) {
-      const message = reason instanceof Error && reason.message === "Tarayici ses klibini oynatamadi."
-        ? "Ses klibi otomatik baslamadi. Dinlemek icin 'Klibi oynat' dugmesine dokun."
+      const message = reason instanceof Error && reason.message === "Tarayıcı ses klibini oynatamadı."
+        ? "Ses klibi otomatik başlamadı. Dinlemek için 'Klibi oynat' düğmesine dokun."
         : reason instanceof Error
           ? reason.message
-          : "Ses klibi otomatik baslamadi. Dinlemek icin 'Klibi oynat' dugmesine dokun.";
+          : "Ses klibi otomatik başlamadı. Dinlemek için 'Klibi oynat' düğmesine dokun.";
       setHearState((current) => ({ ...current, playbackState: "failed", message }));
       throw new Error(message);
     }
@@ -93,7 +93,7 @@ export function useSenseController() {
         : { audioUrl: null, durationMs: 0, supported: false, mimeType: null };
       const recognition: SpeechRecognitionResult = recognitionResult.status === "fulfilled"
         ? recognitionResult.value
-        : { kind: "error", message: "Bilgisayar duydugu sozcukleri anlayamadi." };
+        : { kind: "error", message: "Bilgisayar duyduğu sözcükleri anlayamadı." };
       const requiresManualPlayback = manualPlaybackPreferredRef.current;
 
       replaceRecording(recording.audioUrl);
@@ -102,8 +102,8 @@ export function useSenseController() {
         const clipSeconds = Math.max(1, Math.round((recording.durationMs || 5000) / 1000));
         const nextMessage = recording.audioUrl
           ? requiresManualPlayback
-            ? `${recognition.message} ${clipSeconds} saniyelik kisa bir ses klibi kaydedildi. Dinlemek icin 'Klibi oynat' dugmesine dokun.`
-            : `${recognition.message} ${clipSeconds} saniyelik kisa bir ses klibi kaydedildi. Simdi oynatiliyor.`
+            ? `${recognition.message} ${clipSeconds} saniyelik kısa bir ses klibi kaydedildi. Dinlemek için 'Klibi oynat' düğmesine dokun.`
+            : `${recognition.message} ${clipSeconds} saniyelik kısa bir ses klibi kaydedildi. Şimdi oynatılıyor.`
           : recognition.message;
 
         setHearState((current) => ({
@@ -128,8 +128,8 @@ export function useSenseController() {
 
       const fallbackMessage = recording.audioUrl
         ? requiresManualPlayback
-          ? `${recognition.message} Yine de kisa bir ses klibi kaydedildi. Dinlemek icin 'Klibi oynat' dugmesine dokun.`
-          : `${recognition.message} Yine de kisa bir ses klibi kaydedildi; yeniden oynatabilirsin.`
+          ? `${recognition.message} Yine de kısa bir ses klibi kaydedildi. Dinlemek için 'Klibi oynat' düğmesine dokun.`
+          : `${recognition.message} Yine de kısa bir ses klibi kaydedildi; yeniden oynatabilirsin.`
         : recognition.message;
 
       setHearState((current) => ({
@@ -154,7 +154,7 @@ export function useSenseController() {
 
       throw new Error(recognition.message);
     } catch (reason: unknown) {
-      const message = reason instanceof Error ? reason.message : "Bilgisayar simdi dinlemeyi baslatamadi.";
+      const message = reason instanceof Error ? reason.message : "Bilgisayar şimdi dinlemeyi başlatamadı.";
       setHearState((current) => ({ ...current, deviceState: "failed", message }));
       throw new Error(message);
     }
@@ -163,7 +163,7 @@ export function useSenseController() {
   const submitFallbackTranscript = async (text: string) => {
     const cleaned = text.trim();
     if (!cleaned) {
-      throw new Error("Bilgisayarin tekrar etmesi icin kisa bir ifade yaz.");
+      throw new Error("Bilgisayarın tekrar etmesi için kısa bir ifade yaz.");
     }
 
     await speakText(cleaned);
@@ -172,14 +172,14 @@ export function useSenseController() {
       transcript: cleaned,
       fallbackText: cleaned,
       deviceState: "completed",
-      message: `Bilgisayar yazilan ifadeyi tekrar etti: ${cleaned}`,
+      message: `Bilgisayar yazılan ifadeyi tekrar etti: ${cleaned}`,
       recordingUrl: null,
       clipDurationMs: 0,
       requiresManualPlayback: false,
       playbackState: "idle"
     }));
 
-    return `Bilgisayar yazilan ifadeyi tekrar etti: ${cleaned}`;
+    return `Bilgisayar yazılan ifadeyi tekrar etti: ${cleaned}`;
   };
 
   const startSee = async () => {
@@ -192,13 +192,13 @@ export function useSenseController() {
         mode: "see",
         permissionState,
         deviceState: "active",
-        message: "Bilgisayar kamera goruntusune bakiyor.",
+        message: "Bilgisayar kamera görüntüsüne bakıyor.",
         previewVisible: true
       });
 
-      return { ok: true, message: "Bilgisayar kamera goruntusunu acti." };
+      return { ok: true, message: "Bilgisayar kamera görüntüsünü açtı." };
     } catch (reason: unknown) {
-      const message = reason instanceof Error ? reason.message : "Bilgisayar kamerayi acamadi.";
+      const message = reason instanceof Error ? reason.message : "Bilgisayar kamerayı açamadı.";
       setSeeState({
         mode: "see",
         permissionState: "denied",
@@ -217,10 +217,15 @@ export function useSenseController() {
       mode: "see",
       permissionState: seeState.permissionState,
       deviceState: "completed",
-      message: "Bilgisayar kamera goruntusunu kapatti.",
+      message: "Bilgisayar kamera görüntüsünü kapattı.",
       previewVisible: false
     });
-    return "Bilgisayar kamera goruntusunu kapatti.";
+    return "Bilgisayar kamera görüntüsünü kapattı.";
+  };
+
+  const resetHearState = () => {
+    replaceRecording(null);
+    setHearState(createInitialHearState());
   };
 
   const resetSenseState = () => {
@@ -238,6 +243,7 @@ export function useSenseController() {
     startHear,
     playHearRecording,
     submitFallbackTranscript,
+    resetHearState,
     startSee,
     stopSee,
     resetSenseState

@@ -9,11 +9,11 @@ describe("game shell accessibility", () => {
     renderWithProviders(
       <div>
         <ActionPanel currentAction={null} onAction={() => undefined} />
-        <LiveStatus message="Bilgisayar hazir." />
+        <LiveStatus message="Bilgisayar hazır." />
       </div>
     );
 
-    const speakButtons = screen.getAllByRole("button", { name: /^Konus/i });
+    const speakButtons = screen.getAllByRole("button", { name: /^Konuş/i });
     const hearButtons = screen.getAllByRole("button", { name: /^Dinle/i });
     expect(speakButtons.length).toBeGreaterThanOrEqual(1);
     expect(hearButtons.length).toBeGreaterThanOrEqual(1);

@@ -13,9 +13,9 @@ import { recordTelemetryEvent } from "@/lib/telemetry/logger";
 import { speakText } from "@/lib/speech/synthesis";
 
 const speakPhrases = [
-  "Merhaba! Ben eglenceli bir bilgisayarim.",
-  "Seninle konusabilir, dinleyebilir, dusunebilir ve dans edebilirim.",
-  "Haydi baska bir bilgisayar numarasi deneyelim."
+  "Merhaba! Ben eğlenceli bir bilgisayarım.",
+  "Seninle konuşabilir, dinleyebilir, düşünebilir ve dans edebilirim.",
+  "Haydi başka bir bilgisayar numarası deneyelim."
 ];
 
 export function GamePage() {
@@ -72,7 +72,7 @@ export function GamePage() {
         actionController.completeAction("hear", result.message);
         recordTelemetryEvent({ eventType: "action_completed", actionId: "hear", sessionId, details: { outcome: result.message } });
       } catch (reason: unknown) {
-        const message = reason instanceof Error ? reason.message : "Bilgisayar su anda dinleyemiyor.";
+        const message = reason instanceof Error ? reason.message : "Bilgisayar şu anda dinleyemiyor.";
         actionController.failAction("hear", message);
         recordTelemetryEvent({
           eventType: message.toLowerCase().includes("izin") ? "permission_denied" : "action_failed",
@@ -102,7 +102,7 @@ export function GamePage() {
         const result = await senses.startSee();
         recordTelemetryEvent({ eventType: "action_completed", actionId: "see", sessionId, details: { outcome: result.message } });
       } catch (reason: unknown) {
-        const message = reason instanceof Error ? reason.message : "Bilgisayar su anda bakamiyor.";
+        const message = reason instanceof Error ? reason.message : "Bilgisayar şu anda bakamıyor.";
         recordTelemetryEvent({ eventType: "permission_denied", severity: "warning", actionId: "see", sessionId, details: { reason: message } });
         actionController.failAction("see", message);
       }
@@ -115,7 +115,7 @@ export function GamePage() {
         return;
       }
       thinking.startPuzzle();
-      await speakText("Iki el isareti sec, ben de toplayayim!");
+      await speakText("İki el işareti seç, ben de toplayayım!");
     }
   };
 
@@ -126,9 +126,19 @@ export function GamePage() {
       actionController.completeAction("think", message);
       recordTelemetryEvent({ eventType: "action_completed", actionId: "think", sessionId, details: { left: thinking.state.left, right: thinking.state.right, answer: thinking.state.left + thinking.state.right } });
     } catch (reason: unknown) {
-      const message = reason instanceof Error ? reason.message : "Bilgisayar bunu simdi cozemedi.";
+      const message = reason instanceof Error ? reason.message : "Bilgisayar bunu şimdi çözemedi.";
       actionController.failAction("think", message);
     }
+  };
+
+  const onCloseThinkPanel = () => {
+    thinking.resetPuzzle();
+    actionController.resetAction("Bilgisayar düşünme penceresini kapattı.");
+  };
+
+  const onCloseHearPanel = () => {
+    senses.resetHearState();
+    actionController.resetAction("Bilgisayar dinleme penceresini kapattı.");
   };
 
   const onCloseCameraPreview = () => {
@@ -145,9 +155,9 @@ export function GamePage() {
         <div className="pointer-events-none absolute left-4 top-4 z-10 flex w-[min(92%,22rem)] flex-col gap-3 lg:left-6 lg:top-6 lg:max-w-md">
           {!senses.seeState.previewVisible && actionController.state.currentAction !== "think" ? (
             <div className="rounded-[1.5rem] bg-white/72 px-4 py-3 shadow-bubble backdrop-blur lg:rounded-[1.75rem] lg:px-5 lg:py-4">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-skyplay-teal">Insan ve Bilgisayar</p>
-              <h1 className="mt-1 font-display text-xl leading-tight text-skyplay-navy lg:mt-2 lg:text-3xl">Gor, dinle, konus, dusun ve dans et</h1>
-              <p className="mt-1 hidden text-sm leading-6 text-skyplay-navy/75 lg:block">Asagidaki dugmelere dokunarak bilgisayarin her becerisini calistir.</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-skyplay-teal">İnsan ve Bilgisayar</p>
+              <h1 className="mt-1 font-display text-xl leading-tight text-skyplay-navy lg:mt-2 lg:text-3xl">Gör, dinle, konuş, düşün ve dans et</h1>
+              <p className="mt-1 hidden text-sm leading-6 text-skyplay-navy/75 lg:block">Aşağıdaki düğmelere dokunarak bilgisayarın her becerisini çalıştır.</p>
             </div>
           ) : null}
           <LiveStatus message={currentSceneMessage} />
@@ -156,6 +166,7 @@ export function GamePage() {
         {actionController.state.currentAction === "think" && thinking.state.phase !== "idle" ? (
           <div className="speech-cloud absolute left-1/2 top-1/2 z-20 w-[min(90%,22rem)] -translate-x-1/2 -translate-y-1/2">
             <ThinkPanel
+              onClose={onCloseThinkPanel}
               onSetLeft={thinking.setLeft}
               onSetRight={thinking.setRight}
               onSubmit={onSubmitThinkPuzzle}
@@ -170,6 +181,7 @@ export function GamePage() {
               fallbackText={senses.hearState.fallbackText}
               hasRecording={Boolean(senses.hearState.recordingUrl)}
               message={senses.hearState.message}
+              onClose={onCloseHearPanel}
               onPlayRecording={senses.playHearRecording}
               onSubmitFallback={senses.submitFallbackTranscript}
               playbackState={senses.hearState.playbackState}

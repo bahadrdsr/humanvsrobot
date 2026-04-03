@@ -10,9 +10,10 @@ type HearActionProps = {
   playbackState: "idle" | "ready" | "playing" | "failed";
   onPlayRecording: () => Promise<unknown>;
   onSubmitFallback: (text: string) => Promise<unknown>;
+  onClose?: () => void;
 };
 
-export function HearAction({ transcript, message, fallbackText, clipDurationMs, hasRecording, requiresManualPlayback, playbackState, onPlayRecording, onSubmitFallback }: HearActionProps) {
+export function HearAction({ transcript, message, fallbackText, clipDurationMs, hasRecording, requiresManualPlayback, playbackState, onPlayRecording, onSubmitFallback, onClose }: HearActionProps) {
   const [value, setValue] = useState(fallbackText);
   const clipSeconds = Math.max(1, Math.round((clipDurationMs || 5000) / 1000));
 
@@ -22,22 +23,34 @@ export function HearAction({ transcript, message, fallbackText, clipDurationMs, 
 
   return (
     <div className="rounded-[1.75rem] bg-white/80 p-5 shadow-bubble">
-      <h3 className="font-display text-2xl text-skyplay-navy">Dinle</h3>
+      <div className="flex items-start justify-between gap-3">
+        <h3 className="font-display text-2xl text-skyplay-navy">Dinle</h3>
+        {onClose ? (
+          <button
+            aria-label="Dinleme penceresini kapat"
+            className="rounded-full bg-white/85 px-3 py-1 text-lg font-bold leading-none text-skyplay-navy shadow"
+            onClick={onClose}
+            type="button"
+          >
+            ×
+          </button>
+        ) : null}
+      </div>
       <p className="mt-2 text-sm leading-6 text-skyplay-navy/75">{message}</p>
       <p className="mt-3 rounded-2xl bg-skyplay-cream px-4 py-3 text-base font-semibold text-skyplay-navy">
-        {transcript || "Bilgisayarin duydugu sozcukler burada gorunur."}
+        {transcript || "Bilgisayarın duyduğu sözcükler burada görünür."}
       </p>
 
       <div className="mt-4 rounded-[1.5rem] border border-skyplay-teal/15 bg-skyplay-teal/5 p-4">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-skyplay-teal">Gecici ses klibi</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-skyplay-teal">Geçici ses klibi</p>
             <p className="mt-1 text-sm text-skyplay-navy/70">
               {hasRecording
                 ? requiresManualPlayback
-                  ? `${clipSeconds} saniyelik klip kaydedildi. Mobilde dinlemek icin dugmeye dokun.`
-                  : `${clipSeconds} saniyelik klip kaydedildi. Dinle yeniden calistiginda silinir.`
-                : "Dinleme bitince hizli tekrar icin kisa bir ses klibi burada tutulur."}
+                  ? `${clipSeconds} saniyelik klip kaydedildi. Mobilde dinlemek için düğmeye dokun.`
+                  : `${clipSeconds} saniyelik klip kaydedildi. Dinle yeniden çalıştığında silinir.`
+                : "Dinleme bitince hızlı tekrar için kısa bir ses klibi burada tutulur."}
             </p>
           </div>
           <button
@@ -48,7 +61,7 @@ export function HearAction({ transcript, message, fallbackText, clipDurationMs, 
             }}
             type="button"
           >
-            {playbackState === "playing" ? "Oynatiliyor..." : hasRecording ? "Klibi oynat" : "Henuz klip yok"}
+            {playbackState === "playing" ? "Oynatılıyor..." : hasRecording ? "Klibi oynat" : "Henüz klip yok"}
           </button>
         </div>
       </div>
@@ -65,11 +78,11 @@ export function HearAction({ transcript, message, fallbackText, clipDurationMs, 
           className="flex-1 rounded-full border border-skyplay-teal/30 px-4 py-3"
           name="fallbackText"
           onChange={(event) => setValue(event.target.value)}
-          placeholder="Dinleme calismazsa bir ifade yaz"
+          placeholder="Dinleme çalışmazsa bir ifade yaz"
           value={value}
         />
         <button className="rounded-full bg-skyplay-coral px-5 py-3 font-bold text-white" type="submit">
-          Yazdiklarini tekrar et
+          Yazdıklarını tekrar et
         </button>
       </form>
     </div>

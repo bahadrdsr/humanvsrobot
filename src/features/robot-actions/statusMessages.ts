@@ -1,27 +1,27 @@
 import type { RobotActionId } from "@/features/robot-actions/types";
 
 const labels: Record<RobotActionId, string> = {
-  speak: "konusuyor",
+  speak: "konuşuyor",
   hear: "dinliyor",
-  see: "bakiyor",
-  think: "dusunuyor",
+  see: "bakıyor",
+  think: "düşünüyor",
   dance: "dans ediyor"
 };
 
 const completionLabels: Record<RobotActionId, string> = {
-  speak: "konusmayi",
+  speak: "konuşmayı",
   hear: "dinlemeyi",
-  see: "bakmayi",
-  think: "dusunmeyi",
-  dance: "dansi"
+  see: "bakmayı",
+  think: "düşünmeyi",
+  dance: "dansı"
 };
 
 export function getStartMessage(actionId: RobotActionId) {
-  return `Bilgisayar simdi ${labels[actionId]}.`;
+  return `Bilgisayar şimdi ${labels[actionId]}.`;
 }
 
 export function getIgnoredMessage(actionId: RobotActionId) {
-  return `Bilgisayar mesgul, henuz ${labels[actionId]} moduna gecemiyor.`;
+  return `Bilgisayar meşgul, henüz ${labels[actionId]} moduna geçemiyor.`;
 }
 
 export function getCompleteMessage(actionId: RobotActionId, detail?: string) {

@@ -29,7 +29,7 @@ export async function recognizeShortPhrase(): Promise<SpeechRecognitionResult> {
   if (!Recognition) {
     return {
       kind: "unsupported",
-      message: "Bu tarayici sesi dinleyemiyor. Bunun yerine yedek metin kutusunu kullan."
+      message: "Bu tarayıcı sesi dinleyemiyor. Bunun yerine yedek metin kutusunu kullan."
     };
   }
 
@@ -50,7 +50,7 @@ export async function recognizeShortPhrase(): Promise<SpeechRecognitionResult> {
       const transcript = event.results?.[0]?.[0]?.transcript?.trim();
       if (transcript) {
         settled = true;
-        resolve({ kind: "success", transcript, message: `Bilgisayar sunu duydu: ${transcript}` });
+        resolve({ kind: "success", transcript, message: `Bilgisayar şunu duydu: ${transcript}` });
       }
     };
 
@@ -61,7 +61,7 @@ export async function recognizeShortPhrase(): Promise<SpeechRecognitionResult> {
 
       settled = true;
       if (event.error === "no-speech") {
-        resolve({ kind: "no-speech", message: "Bilgisayar net bir soz duyamadi. Yeniden dene ya da ifadeyi yazarak gir." });
+        resolve({ kind: "no-speech", message: "Bilgisayar net bir söz duyamadı. Yeniden dene ya da ifadeyi yazarak gir." });
         return;
       }
 
@@ -71,7 +71,7 @@ export async function recognizeShortPhrase(): Promise<SpeechRecognitionResult> {
     recognition.onend = () => {
       if (!settled) {
         settled = true;
-        resolve({ kind: "no-speech", message: "Bilgisayar henuz net bir ifade duymadi." });
+        resolve({ kind: "no-speech", message: "Bilgisayar henüz net bir ifade duymadı." });
       }
     };
 

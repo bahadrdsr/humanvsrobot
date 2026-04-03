@@ -115,11 +115,11 @@ export async function playTemporaryAudio(audioUrl: string): Promise<void> {
     };
 
     audio.onended = () => settle(resolve);
-    audio.onerror = () => settle(() => reject(new Error("Tarayici ses klibini oynatamadi.")));
+    audio.onerror = () => settle(() => reject(new Error("Tarayıcı ses klibini oynatamadı.")));
 
     audio.oncanplaythrough = () => {
       void audio.play().catch(() => {
-        settle(() => reject(new Error("Tarayici ses klibini oynatamadi.")));
+        settle(() => reject(new Error("Tarayıcı ses klibini oynatamadı.")));
       });
     };
 

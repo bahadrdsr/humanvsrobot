@@ -28,7 +28,7 @@ export function createInitialHearState(): HearState {
     deviceState: "idle",
     transcript: "",
     fallbackText: "",
-    message: "Hazir oldugunda Dinle dugmesine bas.",
+    message: "Hazır olduğunda Dinle düğmesine bas.",
     recordingUrl: null,
     clipDurationMs: 0,
     requiresManualPlayback: false,
@@ -41,7 +41,7 @@ export function createInitialSeeState(): SeeState {
     mode: "see",
     permissionState: "unknown",
     deviceState: "idle",
-    message: "Kamerayi acmak istediginde Gor dugmesine bas.",
+    message: "Kamerayı açmak istediğinde Gör düğmesine bas.",
     previewVisible: false
   };
 }

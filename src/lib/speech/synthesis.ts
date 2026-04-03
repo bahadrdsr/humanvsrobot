@@ -35,7 +35,7 @@ export async function speakText(text: string) {
   // 2. Any Turkish voice
   // 3. Child/female English voice as a fallback (lang hint still set to tr-TR)
   const voice =
-    voices.find(v => v.lang.toLowerCase().startsWith("tr") && /female|kadin|bayan|bahar/i.test(v.name)) ??
+    voices.find(v => v.lang.toLowerCase().startsWith("tr") && /female|kadın|kadin|bayan|bahar/i.test(v.name)) ??
     voices.find(v => v.lang === "tr-TR") ??
     voices.find(v => v.lang.toLowerCase().startsWith("tr")) ??
     voices.find(v => /junior|child|girl|kyoko|veena|fiona|karen|tessa|zira/i.test(v.name)) ??
@@ -51,7 +51,7 @@ export async function speakText(text: string) {
     utterance.pitch = 1.8;
     utterance.rate = 1.1;
     utterance.onend = () => resolve();
-    utterance.onerror = () => reject(new Error("Bilgisayar sesi simdi yuksek sesle oynatamadi."));
+    utterance.onerror = () => reject(new Error("Bilgisayar sesi şimdi yüksek sesle oynatamadı."));
     window.speechSynthesis.speak(utterance);
   });
 }

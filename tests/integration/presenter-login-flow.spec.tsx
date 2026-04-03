@@ -18,7 +18,7 @@ describe("presenter login flow", () => {
     );
 
     const start = performance.now();
-    await user.click(screen.getByRole("button", { name: /bilgisayar sahnesini ac/i }));
+    await user.click(screen.getByRole("button", { name: /bilgisayar sahnesini aç/i }));
     await screen.findByText("game screen");
     const duration = performance.now() - start;
 

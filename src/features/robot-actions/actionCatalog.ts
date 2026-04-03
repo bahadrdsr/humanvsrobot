@@ -3,37 +3,37 @@ import type { RobotActionCatalogEntry, RobotActionId } from "@/features/robot-ac
 export const actionCatalog: Record<RobotActionId, RobotActionCatalogEntry> = {
   speak: {
     id: "speak",
-    label: "Konus",
+    label: "Konuş",
     icon: "\ud83d\udde3\ufe0f",
-    description: "Bilgisayar neseli bir sesle karsilik verir.",
+    description: "Bilgisayar neşeli bir sesle karşılık verir.",
     cancelSafe: true
   },
   hear: {
     id: "hear",
     label: "Dinle",
     icon: "\ud83d\udc42",
-    description: "Bilgisayar dinler, sonra duydugunu tekrar eder.",
+    description: "Bilgisayar dinler, sonra duyduğunu tekrar eder.",
     cancelSafe: false
   },
   see: {
     id: "see",
-    label: "Gor",
+    label: "Gör",
     icon: "\ud83d\udc41\ufe0f",
-    description: "Bilgisayar kamera goruntusunu acar.",
+    description: "Bilgisayar kamera görüntüsünü açar.",
     cancelSafe: false
   },
   think: {
     id: "think",
-    label: "Dusun",
+    label: "Düşün",
     icon: "\ud83e\udd14",
-    description: "Bilgisayardan iki el isaretini toplamasini iste.",
+    description: "Bilgisayardan iki el işaretini toplamasını iste.",
     cancelSafe: false
   },
   dance: {
     id: "dance",
     label: "Dans",
     icon: "\ud83d\udd7a",
-    description: "Bilgisayar hareket edebildigini gostermek icin dans eder!",
+    description: "Bilgisayar hareket edebildiğini göstermek için dans eder!",
     cancelSafe: true
   }
 };

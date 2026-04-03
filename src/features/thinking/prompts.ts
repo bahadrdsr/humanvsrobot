@@ -12,32 +12,32 @@ export type ThinkPrompt = {
 export const thinkPrompts: ThinkPrompt[] = [
   {
     promptId: "count-2-bears",
-    promptText: "Iki kucuk elde kac oyuncak ayi var?",
+    promptText: "İki küçük elde kaç oyuncak ayı var?",
     promptType: "counting",
     expectedAnswer: "2",
     resultMessage: {
-      correct: "Evet. Iki elde iki oyuncak ayi var. Harika dusundun!",
-      incorrect: "Guzel deneme. Bilgisayar iki oyuncak ayiyi dusunuyordu."
+      correct: "Evet. İki elde iki oyuncak ayı var. Harika düşündün!",
+      incorrect: "Güzel deneme. Bilgisayar iki oyuncak ayıyı düşünüyordu."
     }
   },
   {
     promptId: "add-1-1",
-    promptText: "Bir bilgisayar arti bir bilgisayar kac eder?",
+    promptText: "Bir bilgisayar artı bir bilgisayar kaç eder?",
     promptType: "simple-addition",
     expectedAnswer: "2",
     resultMessage: {
-      correct: "Dogru. Bir bilgisayar ile bir bilgisayar iki eder!",
-      incorrect: "Eglenceli bir tahmindi. Bir bilgisayar arti bir bilgisayar iki eder."
+      correct: "Doğru. Bir bilgisayar ile bir bilgisayar iki eder!",
+      incorrect: "Eğlenceli bir tahmindi. Bir bilgisayar artı bir bilgisayar iki eder."
     }
   },
   {
     promptId: "match-red",
-    promptText: "Parlak bir itfaiye aracina hangi renk uyar: kirmizi mi mavi mi?",
+    promptText: "Parlak bir itfaiye aracına hangi renk uyar: kırmızı mı mavi mi?",
     promptType: "matching",
-    expectedAnswer: "kirmizi",
+    expectedAnswer: "kırmızı",
     resultMessage: {
-      correct: "Evet. Kirmizi itfaiye araci icin parlak bir renktir!",
-      incorrect: "Mavi guzel, ama bilgisayar kirmiziyi ariyordu."
+      correct: "Evet. Kırmızı itfaiye aracı için parlak bir renktir!",
+      incorrect: "Mavi güzel, ama bilgisayar kırmızıyı arıyordu."
     }
   }
 ];

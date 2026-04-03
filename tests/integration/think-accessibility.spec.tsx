@@ -14,6 +14,7 @@ describe("think accessibility", () => {
     };
     renderWithProviders(
       <ThinkPanel
+        onClose={vi.fn()}
         onSetLeft={vi.fn()}
         onSetRight={vi.fn()}
         onSubmit={vi.fn()}
@@ -21,6 +22,7 @@ describe("think accessibility", () => {
       />
     );
     expect(screen.getByRole("button", { name: /bilgisayara sor/i })).toBeInTheDocument();
-    expect(screen.getAllByRole("button", { name: /el isareti/i })).toHaveLength(2);
+    expect(screen.getByRole("button", { name: /düşünme penceresini kapat/i })).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: /el işareti/i })).toHaveLength(2);
   });
 });

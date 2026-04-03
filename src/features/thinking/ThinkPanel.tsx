@@ -6,6 +6,7 @@ type ThinkPanelProps = {
   onSetLeft: (v: number) => void;
   onSetRight: (v: number) => void;
   onSubmit: () => void;
+  onClose?: () => void;
 };
 
 function HandSignCard({ value, onChange, disabled }: { value: number; onChange: (v: number) => void; disabled: boolean }) {
@@ -13,7 +14,7 @@ function HandSignCard({ value, onChange, disabled }: { value: number; onChange: 
   const next = () => onChange(value >= 5 ? 1 : value + 1);
   return (
     <button
-      aria-label={`El isareti ${value}, degistirmek icin dokun`}
+      aria-label={`El işareti ${value}, değiştirmek için dokun`}
       className="flex h-24 w-20 cursor-pointer select-none flex-col items-center justify-center gap-1 rounded-2xl border-2 border-skyplay-teal/40 bg-skyplay-cream shadow transition active:scale-95 disabled:cursor-default disabled:opacity-60"
       disabled={disabled}
       onClick={next}
@@ -21,26 +22,38 @@ function HandSignCard({ value, onChange, disabled }: { value: number; onChange: 
     >
       <span className="text-4xl leading-none">{sign.emoji}</span>
       <span className="text-lg font-bold text-skyplay-navy">{sign.n}</span>
-      <span className="text-[10px] text-skyplay-navy/50">dokun ve degistir</span>
+      <span className="text-[10px] text-skyplay-navy/50">dokun ve değiştir</span>
     </button>
   );
 }
 
-export function ThinkPanel({ state, onSetLeft, onSetRight, onSubmit }: ThinkPanelProps) {
+export function ThinkPanel({ state, onSetLeft, onSetRight, onSubmit, onClose }: ThinkPanelProps) {
   const isPicking = state.phase === "picking";
   const isAnswered = state.phase === "answered";
 
   return (
     <div className="rounded-[1.75rem] bg-white/80 p-5 shadow-bubble">
-      <h3 className="font-display text-2xl text-skyplay-navy">Dusun</h3>
+      <div className="flex items-start justify-between gap-3">
+        <h3 className="font-display text-2xl text-skyplay-navy">Düşün</h3>
+        {onClose ? (
+          <button
+            aria-label="Düşünme penceresini kapat"
+            className="rounded-full bg-white/85 px-3 py-1 text-lg font-bold leading-none text-skyplay-navy shadow"
+            onClick={onClose}
+            type="button"
+          >
+            ×
+          </button>
+        ) : null}
+      </div>
       {state.phase === "idle" ? (
         <p className="mt-3 text-sm leading-6 text-skyplay-navy/70">
-          <strong>Dusun</strong> dugmesine bas ve bilgisayardan iki el isaretini toplamasini iste!
+          <strong>Düşün</strong> düğmesine bas ve bilgisayardan iki el işaretini toplamasını iste!
         </p>
       ) : (
         <>
           <p className="mt-2 text-sm font-semibold text-skyplay-teal">
-            {isPicking ? "Iki el isareti sec, bilgisayar toplasin!" : "Bilgisayar cevapladi!"}
+            {isPicking ? "İki el işareti seç, bilgisayar toplasın!" : "Bilgisayar cevapladı!"}
           </p>
           <div className="mt-4 flex items-center justify-center gap-3">
             <HandSignCard disabled={isAnswered} onChange={onSetLeft} value={state.left} />

@@ -5,7 +5,7 @@ async function requestMedia(constraints: MediaStreamConstraints, permissionName:
 
   if (!navigator.mediaDevices?.getUserMedia) {
     const label = permissionName === "microphone" ? "Mikrofon" : "Kamera";
-    throw new Error(`${label} erisimi bu tarayicida desteklenmiyor.`);
+    throw new Error(`${label} erişimi bu tarayıcıda desteklenmiyor.`);
   }
 
   const stream = await navigator.mediaDevices.getUserMedia(constraints);
